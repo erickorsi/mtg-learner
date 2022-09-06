@@ -1,0 +1,6 @@
+Manual instalation of wheels for Windows: https://www.lfd.uci.edu/~gohlke/pythonlibs/
+Polyglot is not yet stable for Windows, and must follow the following installation process:
+    Search for the PyICU, pycld2, futures. (PyICU and pycld2 need to be the same version of python you are using, in my case, 310 for 3.10.2).
+    PyICU‑2.9‑cp310‑cp310‑win_amd64.whl
+    pycld2‑0.41‑cp310‑cp310‑win_amd64.whl
+    futures-3.2.0+dummy-py3-none-any.whl
