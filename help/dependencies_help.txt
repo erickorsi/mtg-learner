@@ -1,3 +1,6 @@
+Created in Python 3.10.6
+Dependencies can be found in requirements.txt, with the exception of PyICU, pycld2 and futures.
+
 pip3 install scikit-learn
 pip3 install theano
 pip3 install pandas
@@ -15,7 +18,8 @@ If using Linux, run:
 
 If using Windowsm polyglot is not yet stable, and requires the following installation process:
 
-    For the dependencies, search for the "PyICU", "pycld2" and "futures" wheels. (PyICU and pycld2 need to be of the correct version of python you are using, in my case, 310 for 3.10.2).
+    For the dependencies, search for the "PyICU", "pycld2" and "futures" wheels.
+    (PyICU and pycld2 need to be of the correct version of python you are using, in my case, 310 for 3.10.6)
 
     PyICU‑2.9‑cp310‑cp310‑win_amd64.whl
     pycld2‑0.41‑cp310‑cp310‑win_amd64.whl
