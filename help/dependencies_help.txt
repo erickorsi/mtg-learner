@@ -1,6 +1,46 @@
-Manual instalation of wheels for Windows: https://www.lfd.uci.edu/~gohlke/pythonlibs/
-Polyglot is not yet stable for Windows, and must follow the following installation process:
-    Search for the PyICU, pycld2, futures. (PyICU and pycld2 need to be the same version of python you are using, in my case, 310 for 3.10.2).
+pip3 install scikit-learn
+pip3 install theano
+pip3 install pandas
+pip3 install nltk
+
+In python, run:
+import nltk
+nltk.download("punkt")
+nltk.download("stopwords")
+nltk.download("rslp")
+
+If using Linux, run:
+
+    pip3 install polyglot
+
+If using Windowsm polyglot is not yet stable, and requires the following installation process:
+
+    For the dependencies, search for the "PyICU", "pycld2" and "futures" wheels. (PyICU and pycld2 need to be of the correct version of python you are using, in my case, 310 for 3.10.2).
+
     PyICU‑2.9‑cp310‑cp310‑win_amd64.whl
     pycld2‑0.41‑cp310‑cp310‑win_amd64.whl
     futures-3.2.0+dummy-py3-none-any.whl
+
+    Most wheels for manual download can be found here: https://www.lfd.uci.edu/~gohlke/pythonlibs/
+
+    In the directory where the wheels are, run
+
+    python -m pip install PyICU‑2.9‑cp310‑cp310‑win_amd64.whl
+    python -m pip install pycld2‑0.41‑cp310‑cp310‑win_amd64.whl
+    python -m pip install futures-3.2.0+dummy-py3-none-any.whl
+
+    You may need to download and install the "morfessor" wheel "Morfessor-2.0.6-py3-none-any.whl" as well.
+
+    Install polyglot from git:
+
+    git clone https://github.com/aboSamoor/polyglot.git
+    cd polyglot
+    python setup.py install
+
+    After checking if the import was successful with "from polyglot.text import Text" in python, the cloned repo can be deleted.
+
+When using polyglot for a specific language other than english, you may need to download embeddings and parts-of-speech for that language.
+For example, for working with text in portuguese (pt), you run in the comand prompt:
+
+polyglot download embeddings2.pt
+polyglot download pos2.pt
