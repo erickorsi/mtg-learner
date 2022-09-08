@@ -16,65 +16,63 @@ from polyglot.text import Text
 import pandas as pd
 import numpy as np
 
-class LSTMClassifier():
+def LSTMClassifier(
+    classes,
+    total_pos,
+    hidden_layers,
+    nodes,
+    loss,
+    optimizer,
+    metrics,
+    ignore_empty=True,
+    recurrent_dropout=0,
+    dropout=0.5,
+    activation='tanh',
+    recurrent_activation='sigmoid'
+):
     '''
     '''
-    def __init__(
-        self,
-        classes,
-        total_pos,
-        hidden_layers,
-        nodes,
-        loss,
-        optimizer,
-        metrics,
-        ignore_empty=True,
-        recurrent_dropout=0,
-        dropout=0.5,
-        activation='tanh',
-        recurrent_activation='sigmoid'
-    ):
-        # Initiates the LSTM architecture
-        model = Sequential()
-        model.add(Input(shape=(None,))) # Variable length sentences, flexible input
-        if ignore_empty == True:
-            model.add(Embedding(
-                name = 'Embedding_mask_0',
-                input_dim  = total_pos, # Dimension size based on amount of possible POS tags
-                output_dim = total_pos,
-                mask_zero  = True
-            ))# Maintain dimensions, but ignore filler spaces in shorter texts
-        if hidden_layers > 1:
-            for layer in range(hidden_layers-1):
-                model.add(Bidirectional(LSTM(
-                    name = 'LSTM',
-                    units = nodes,
-                    recurrent_dropout = recurrent_dropout,
-                    dropout = dropout,
-                    activation = activation,
-                    recurrent_activation = recurrent_activation,
-                    return_sequences = True # Hidden layers with stacked LSTM
-                )))
-        model.add(Bidirectional(LSTM( 
-            name = 'LSTM',
-            units = nodes,
-            recurrent_dropout = recurrent_dropout,
-            dropout = dropout,
-            activation = activation,
-            recurrent_activation = recurrent_activation
-        ))) # Final LSTM layer
-        if classes == 2: # Binary classification can be simplified to a single probability between 0 and 1
-            classes = 1
-        model.add(Dense(
-            name='Output',
-            units = classes, # Number of outputs
-            activation = 'sigmoid' # Normalizes into a probability between 0 and 1
-        )) # Output layer for classification
+    # Initiates the LSTM architecture
+    model = Sequential()
+    model.add(Input(shape=(None,))) # Variable length sentences, flexible input
+    if ignore_empty == True:
+        model.add(Embedding(
+            name = 'Embedding_mask_0',
+            input_dim  = total_pos, # Dimension size based on amount of possible POS tags
+            output_dim = total_pos,
+            mask_zero  = True
+        ))# Maintain dimensions, but ignore filler spaces in shorter texts
+    if hidden_layers > 1:
+        for layer in range(hidden_layers-1):
+            model.add(Bidirectional(LSTM(
+                name = 'LSTM',
+                units = nodes,
+                recurrent_dropout = recurrent_dropout,
+                dropout = dropout,
+                activation = activation,
+                recurrent_activation = recurrent_activation,
+                return_sequences = True # Hidden layers with stacked LSTM
+            )))
+    model.add(Bidirectional(LSTM( 
+        name = 'LSTM',
+        units = nodes,
+        recurrent_dropout = recurrent_dropout,
+        dropout = dropout,
+        activation = activation,
+        recurrent_activation = recurrent_activation
+    ))) # Final LSTM layer
+    if classes == 2: # Binary classification can be simplified to a single probability between 0 and 1
+        classes = 1
+        loss = 'binary_crossentropy'
+    model.add(Dense(
+        name='Output',
+        units = classes, # Number of outputs
+        activation = 'sigmoid' # Normalizes into a probability between 0 and 1
+    )) # Output layer for classification
 
-    def fit():
-        '''
-        '''
-
+    # Compile the model
+    model.compile(loss=loss,optimizer='rmsprop',metrics=['accuracy',Precision(),Recall(),FalseNegatives(),FalsePositives(),AUC()])
+    return model
 
 def remove_punctuation(text):
     '''
