@@ -22,26 +22,34 @@ def LSTMClassifier(
     hidden_layers,
     nodes,
     loss,
-    optimizer,
     metrics,
     ignore_empty=True,
     recurrent_dropout=0,
     dropout=0.5,
     activation='tanh',
-    recurrent_activation='sigmoid'
+    recurrent_activation='sigmoid',
+    optimizer='rmsprop'
 ):
     '''
     '''
+    # Binary classification can be simplified to a single probability between 0 and 1
+    if classes == 2:
+        classes = 1
+        loss = 'binary_crossentropy'
+
     # Initiates the LSTM architecture
     model = Sequential()
     model.add(Input(shape=(None,))) # Variable length sentences, flexible input
+
     if ignore_empty == True:
         model.add(Embedding(
             name = 'Embedding_mask_0',
             input_dim  = total_pos, # Dimension size based on amount of possible POS tags
             output_dim = total_pos,
             mask_zero  = True
-        ))# Maintain dimensions, but ignore filler spaces in shorter texts
+        )) # Maintain dimensions, but ignore filler spaces in shorter texts
+
+    # LSTM layers
     if hidden_layers > 1:
         for layer in range(hidden_layers-1):
             model.add(Bidirectional(LSTM(
@@ -61,17 +69,16 @@ def LSTMClassifier(
         activation = activation,
         recurrent_activation = recurrent_activation
     ))) # Final LSTM layer
-    if classes == 2: # Binary classification can be simplified to a single probability between 0 and 1
-        classes = 1
-        loss = 'binary_crossentropy'
+
+    # Output layer for classification
     model.add(Dense(
         name='Output',
         units = classes, # Number of outputs
         activation = 'sigmoid' # Normalizes into a probability between 0 and 1
-    )) # Output layer for classification
+    ))
 
     # Compile the model
-    model.compile(loss=loss,optimizer='rmsprop',metrics=['accuracy',Precision(),Recall(),FalseNegatives(),FalsePositives(),AUC()])
+    model.compile(loss=loss,optimizer=optimizer,metrics=['accuracy',Precision(),Recall(),FalseNegatives(),FalsePositives(),AUC()])
     return model
 
 def remove_punctuation(text):
