@@ -27,7 +27,7 @@ def remove_punctuation(text):
     text = text.translate(translator)
     return text
 
-def convert_pos(text, language='en'):
+def convert_pos(text, language=None):
     '''
     '''
     text = Text(text, hint_language_code=language)
@@ -36,7 +36,7 @@ def convert_pos(text, language='en'):
         pos.append(tag)
     return pos
 
-def grammar_nlp(text, language='en', ignore_punctuation=False):
+def grammar_nlp(text, language=None, ignore_punctuation=False):
     '''
     '''
     # Dictionary of Parts-of-Speech supported by polyglot
@@ -56,3 +56,5 @@ def grammar_nlp(text, language='en', ignore_punctuation=False):
     # Get POS values for all words in the text
     pos = convert_pos(text, language)
     sequence = np.array([polyglot_pos[word] for word in pos])
+
+    return sequence, total_pos
