@@ -119,3 +119,24 @@ def grammar_nlp(text, language=None, ignore_punctuation=False):
     sequence = np.array([polyglot_pos[word] for word in pos])
 
     return sequence, total_pos
+
+def get_data(dataset, independent_var, texts_var='auto'):
+    '''
+    '''
+    # Gets the defined classes
+    Y = np.array(dataset[independent_var])
+    # Gets the texts
+    if texts_var == 'auto': # If there is only 1 other column in the dataset
+        X = dataset.drop(independent_var, axis=1)
+    else:
+        X = dataset[texts_var]
+
+    # Converts grammar
+    for index in X.index:
+        text = X[index]
+        X[index] = grammar_nlp(text)
+
+    # Fills shorter texts with 0
+    X = X.fillna(0).to_numpy()
+
+    return X, Y
