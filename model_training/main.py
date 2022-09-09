@@ -5,10 +5,10 @@ Created on Mon Sep 05 20:27 2022
 @author: https://github.com/erickorsi
 
 Main script for training text classification models using an ensemble of
-LSTM and SVC.
+grammar model and vocabulary model.
 """
 
-class BrocaClassifier():
+class MTGClassifier():
     '''
     '''
     def fit(x, y, language='', ignore_punctuation=False, cross_validation=0):
